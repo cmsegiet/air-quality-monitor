@@ -1,0 +1,19 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: Breathalyzer.PcbDoc   2019-01-22  9:01:04 PM
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII RoundHoles File : Breathalyzer.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      12mil (0.3mm)                                             Round             93        PTH        0.00inch (0.00mm)
+T2      35mil (0.9mm)                                             Round             2         PTH        0.00inch (0.00mm)
+T3      40mil (1.02mm)                                            Round             4         PTH        0.00inch (0.00mm)
+T4      47mil (1.2mm)                                             Round             2         PTH        0.00inch (0.00mm)
+T5      126mil (3.2mm)                                            Round             4         PTH        0.00inch (0.00mm)
+T6      35mil (0.9mm)                                             Round             2         NPTH       0.00inch (0.00mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              107
+
+Total Processing Time (hh:mm:ss) : 00:00:00

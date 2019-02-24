@@ -1,0 +1,30 @@
+Added Component: Designator=U9(TUSB322IRWBR)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Lead Free"; Value = "Lead Free"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "TUSB322IRWBR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Max Operating Temperature"; Value = "85°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Max Supply Voltage"; Value = "5.5V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Min Operating Temperature"; Value = "-40°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Min Supply Voltage"; Value = "4.5V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mount"; Value = "Surface Mount"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Pins"; Value = "12"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Ports"; Value = "1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packaging"; Value = "Cut Tape"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pricing 1"; Value = "1=2.34, 10=1.99, 50=1.99, 100=1.59, 1000=1.15, 10000=1.04 (USD)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "REACH SVHC"; Value = "No SVHC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Stock 1"; Value = "2739"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Mouser"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "595-TUSB322IRWBR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "USB Standard"; Value = "USB 1.0"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=INT_N Pin=U9-1
+Added Pin To Net: NetName=ID Pin=U9-2
+Added Pin To Net: NetName=SCL Pin=U9-3
+Added Pin To Net: NetName=SDA Pin=U9-4
+Added Pin To Net: NetName=GND Pin=U9-6
+Added Pin To Net: NetName=NetQ4_D Pin=U9-7
+Added Pin To Net: NetName=GND Pin=U9-8
+Added Pin To Net: NetName=NetU4_12 Pin=U9-9
+Added Pin To Net: NetName=NetU4_11 Pin=U9-10
+Added Pin To Net: NetName=NetR22_2 Pin=U9-11
+Added Pin To Net: NetName=5V Pin=U9-12
