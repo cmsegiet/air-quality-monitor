@@ -36,7 +36,7 @@ the design also used a 18650 battery for extra capacity. However, this design fa
 
 ### Progress
 
-![Picture of assembled and somewhat working board](https://imgur.com/XQFeMB9)
+[Assembled Board w/ Functioning Screen](https://i.imgur.com/XQFeMB9.jpg)
 
   At this point, all hardware is operating as expected, however, there is more testing to verify this. A quick I2C scan indicated that both the
   fuel guage and screen are responding (this was clear based on the above image). 
