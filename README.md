@@ -36,7 +36,7 @@ the design also used a 18650 battery for extra capacity. However, this design fa
 
 ### Progress
 
-![Assembled Board w/ Functioning Screen](https://github.com/cmsegiet/air-quality-monitor/raw/master/Pictures/PCB%20-%20Screen%20and%20Charging.jpg)
+<img src="/Pictures/PCB/PCB%20-%20Screen%20and%20Charging.jpg" width="50%" height="50%">
 
   At this point, all hardware is operating as expected, however, there is more testing to verify this. A quick I2C scan indicated that both the
   fuel guage and screen are responding (this was clear based on the above image). 
