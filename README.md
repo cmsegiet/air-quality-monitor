@@ -46,8 +46,8 @@ the design also used a 18650 battery for extra capacity. However, this design fa
   - [x] Ensure battery can be charged
   - [x] Use screen demo from Adafruit to ensure screen is functioning
   - [ ] Design quick two-part, snap-together case to be 3D-printed
-  - [ ] Ensure MiCS-5524 gas sensor is providing data
-  - [ ] Check fuel guage functionality with example code from Sparkfun
+  - [x] Ensure MiCS-5524 gas sensor is providing data
+  - [x] Check fuel guage functionality with example code from Sparkfun
   - [ ] Enable sensor based on interrupt from button press
   - [ ] Research sleep functionality with ESP32
   - [ ] Enable bluetooth communication
