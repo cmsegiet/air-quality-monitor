@@ -1,23 +1,14 @@
 Project Outputs Generation Report
 ---------------------------------
-Start Output Generation At 6:29:07 PM On 2019-03-17
+Start Output Generation At 12:23:58 PM On 2019-04-04
 
-Output: Gerber Files
-Type  : Gerber
+Output: Export STEP
+Type  : ExportSTEP
 From  : Variant [[No Variations]] of PCB Document [AirQualityMonitor.PcbDoc]
-   Generated File[AirQualityMonitor.GTO]
-   Generated File[AirQualityMonitor.GTS]
-   Generated File[AirQualityMonitor.GTL]
-   Generated File[AirQualityMonitor.GBL]
-   Generated File[AirQualityMonitor.GBS]
-   Generated File[AirQualityMonitor.GBO]
-   Generated File[AirQualityMonitor.GM1]
-   Generated File[AirQualityMonitor.RUL]
-   Generated File[AirQualityMonitor.EXTREP]
-   Generated File[AirQualityMonitor.REP]
+   Generated File[AirQualityMonitor.step]
 
 
-Files Generated   : 10
+Files Generated   : 1
 Documents Printed : 0
 
-Finished Output Generation At 6:29:08 PM On 2019-03-17
+Finished Output Generation At 12:24:04 PM On 2019-04-04
