@@ -1,9 +1,13 @@
+#include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include <esp_log.h>
-//#include "ssd1306.h"
+#include "ssd1306.h"
 #include "mics5524.h"
+#include "button.h"
+#include "driver/gpio.h"
+#include "pin_defs.h"
 #include "bac_lookup.h"
 #include "u8g2_esp32_hal.h"
 #include "bitmap_logos.h"
@@ -18,76 +22,93 @@
 // SCL - GPIO22
 #define PIN_SCL 22
 
+#define ESP_INTR_FLAG_DEFAULT 0
+
 static const char *TAG = "ssd1306";
 
-static QueueHandle_t xQueue = NULL;
+//static QueueHandle_t xQueue = NULL;
 const TickType_t xDelay100ms = 100 / portTICK_PERIOD_MS;
 u8g2_t u8g2;
 uint16_t bac;
 
-void task_read(void *ignore) { 
-    BaseType_t xStatus;
-    
-    int sensorValue = 0;
-    for( ;; ) { 
-        mics5524_read(&sensorValue);
-        xStatus = xQueueSendToBack(xQueue, &sensorValue, 0);
-        vTaskDelay(xDelay100ms);
+button_event_t ev;
+QueueHandle_t button_events;
 
-        if(xStatus != pdPASS) { 
-            printf("Queue full\n");
-        }
 
-    }
+
+void cms_animation(void) {
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 0, 0, cms_width, cms_height, cms_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(2500/portTICK_PERIOD_MS);
 }
-void task_receive(void *ignore) { 
-    int rawvalue = 0;
-    char temp_str[10]= "";
-    
-    BaseType_t xStatus;
 
-    for( ;; ) { 
-        if(uxQueueMessagesWaiting(xQueue) != 0) {
-            printf("should've been empty\n");
-        }
-        xStatus = xQueueReceive(xQueue, &rawvalue, xDelay100ms);
-
-        //itoa(rawvalue, string, 10);
-        if(xStatus == pdPASS) { 
-            if ( rawvalue < BAC_START ) {
-                bac = 0;
-                sprintf(temp_str, "0.000%%");
-            } else if ( rawvalue > BAC_DRUNK ) {
-                sprintf(temp_str, "DRUNK");
-            } else {
-                rawvalue = rawvalue - BAC_START;
-                bac = bac_chart[rawvalue];
-                sprintf(temp_str, "0.0%2d%%", bac);
-            }
-
-            u8g2_ClearBuffer(&u8g2);
-            u8g2_DrawStr(&u8g2, 32,24, temp_str);
-            u8g2_SendBuffer(&u8g2);
-        }
-    }
+void beer_animation(void) {
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_0_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_1_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_2_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_3_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_4_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_5_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_6_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_7_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    ESP_LOGI(TAG, "u8g2_drawXBM");
+    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_8_bits);
+    u8g2_SendBuffer(&u8g2);
+    vTaskDelay(200/portTICK_PERIOD_MS);
+    u8g2_ClearBuffer(&u8g2);
+    u8g2_SendBuffer(&u8g2);
 }
 
 void app_main(void)
 {
-    xQueue = xQueueCreate(20, sizeof(int16_t));
+    
     mics5524_init();
-    mics5524_enable();
+    esp_log_level_set(TAG, ESP_LOG_DEBUG);
+
+    // mics5524_enable();
     u8g2_esp32_hal_t u8g2_esp32_hal = U8G2_ESP32_HAL_DEFAULT;
 	u8g2_esp32_hal.sda   = PIN_SDA;
 	u8g2_esp32_hal.scl  = PIN_SCL;
 	u8g2_esp32_hal_init(u8g2_esp32_hal);
 
-
-	 // a structure which will contain all the data for one display
 	u8g2_Setup_ssd1306_i2c_128x32_univision_f(
 		&u8g2,
 		U8G2_R0,
-		//u8x8_byte_sw_i2c,
 		u8g2_esp32_i2c_byte_cb,
 		u8g2_esp32_gpio_and_delay_cb);  // init u8g2 structure
 	u8x8_SetI2CAddress(&u8g2.u8x8,0x78);
@@ -101,54 +122,74 @@ void app_main(void)
 	u8g2_ClearBuffer(&u8g2);
 
     ESP_LOGI(TAG, "u8g2_SetFont");
-    u8g2_SetFont(&u8g2, u8g2_font_crox3hb_tf);
+    u8g2_SetFont(&u8g2, u8g2_font_prospero_bold_nbp_tr);
+    u8g2_SendBuffer(&u8g2);
 
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_0_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_1_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_2_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_3_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_4_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_5_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_6_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_7_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
-    ESP_LOGI(TAG, "u8g2_drawXBM");
-    u8g2_DrawXBM(&u8g2, 32, 0, beer_width, beer_height, beer_8_bits);
-    u8g2_SendBuffer(&u8g2);
-    vTaskDelay(100/portTICK_PERIOD_MS);
-    u8g2_ClearBuffer(&u8g2);
+    // cms_animation();
 
-    xTaskCreate(&task_read, "read", 2048, NULL, 4, NULL);
-    xTaskCreate(&task_receive, "receive", 2048, NULL, 4, NULL);
+    
+    // while(1) { 
+    //     ESP_LOGI(TAG, "LEVEL: %d", gpio_get_level(GPIO_NUM_5));
+    //     vTaskDelay(xDelay100ms);
+    // }
+    beer_animation();
+
+    button_events = button_init(PIN_BIT(INPUT_BUTT));
+    char temp_str[10];
+    int sensorVoltage = 0;
+    int maxReading = 0;
+
+    ESP_LOGI(TAG, "ADC Val: %d", sensorVoltage);
+    while(true) { 
+        if(xQueueReceive(button_events, &ev, xDelay100ms)) { 
+            if((ev.pin == INPUT_BUTT) && (ev.event == BUTTON_UP)) {
+                ESP_LOGI(TAG, "u8g2_SetPowerSave");
+                u8g2_SetPowerSave(&u8g2, 0); // wake up display
+                mics5524_enable();
+                for(int i = 10; i >= 0; i--) {
+                    sprintf(temp_str, "Get Ready %d", i); 
+                    u8g2_DrawStr(&u8g2, 20, 20, temp_str);
+                    u8g2_SendBuffer(&u8g2);
+                    u8g2_ClearBuffer(&u8g2);
+                    vTaskDelay(xDelay100ms*10);
+                }
+                u8g2_ClearBuffer(&u8g2);
+                u8g2_SendBuffer(&u8g2);
+                u8g2_DrawStr(&u8g2, 30, 20, "Blow");
+                u8g2_SendBuffer(&u8g2);
+                u8g2_ClearBuffer(&u8g2);
+                for(int j = 50; j >= 0; j--) { 
+                    mics5524_read(&sensorVoltage);
+                    ESP_LOGI(TAG, "ADC Val: %d", sensorVoltage);
+                    if(sensorVoltage > maxReading) {
+                        maxReading = sensorVoltage;
+                        
+                    }
+                    vTaskDelay(xDelay100ms);
+                }
+                mics5524_disable();
+                if(maxReading < BAC_START) { 
+                    bac = 0;
+                    sprintf(temp_str, "BAC: 0.000%%");
+                } else if (maxReading > BAC_DRUNK) { 
+                    sprintf(temp_str, "DRUNK");
+                } else {
+                    maxReading = maxReading - BAC_START;
+                    bac = bac_chart[maxReading];
+                    sprintf(temp_str, "BAC: 0.0%2d", bac);
+                }
+                u8g2_DrawStr(&u8g2, 20, 20, temp_str);
+                u8g2_SendBuffer(&u8g2);
+                vTaskDelay(xDelay100ms*30);
+                u8g2_ClearBuffer(&u8g2);
+                u8g2_SendBuffer(&u8g2);
+                beer_animation();
+
+                ESP_LOGI(TAG, "u8g2_SetPowerSave");
+	            u8g2_SetPowerSave(&u8g2, 1); // wake up display
+
+            }
+        }
+    }
+
 }
