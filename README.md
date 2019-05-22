@@ -41,6 +41,10 @@ the design also used a 18650 battery for extra capacity. However, this design fa
   At this point, all hardware is operating as expected, however, there is more testing to verify this. A quick I2C scan indicated that both the
   fuel guage and screen are responding (this was clear based on the above image). 
   
+  ## 2019-05-22 Update:
+  
+  The air quality monitor successfully runs a ethanol measurment sequence on button press and displays the result. However, the conversion from ADC value to ppm appears to be incorrect in comparison to results from BACtrack's product. SGX has been contacted for technical inquiry about the conversion specifically for the MiCS5524 sensor. The current 5th order regression equation to approximate ppm from ADC value was taken from an example using another type of sensor which only has a range of 50 to 500ppm for ethanol, while the MiCS5524 sensor has a range of 10 to 1000ppm, so I suspect this equation is throwing off the results dramatically. I was still able to verify that the measurement sequence operates as expected by blowing 91% isopropyl alcohol directly in front of the sensor to get a response regardless of the incorrect equation. 
+  
   **Task list:**
   - [x] Assemble board
   - [x] Ensure battery can be charged
