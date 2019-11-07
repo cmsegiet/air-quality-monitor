@@ -52,10 +52,10 @@ the design also used a 18650 battery for extra capacity. However, this design fa
   - [x] Ensure MiCS-5524 gas sensor is providing data
   - [x] Check fuel guage functionality with example code from Sparkfun
   - [x] Enable sensor based on interrupt from button press
-  - [ ] Add functionality for reading fuel gauge
+  - [x] Add functionality for reading fuel gauge
   - [ ] Reevaluate ADC to ppm conversion
   - [ ] Design quick two-part, snap-together case to be 3D-printed
   - [ ] Research sleep functionality with ESP32
-  - [ ] Enable bluetooth communication
+  - [x] Enable bluetooth communication
   - [ ] Develop simple Android app to receive data from device
   - [ ] Styling and making the app look nice
